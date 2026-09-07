@@ -1,0 +1,9 @@
+import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { Bell, UserRound } from "lucide-react";
+import api from "../services/api.js";
+import { useAuth } from "../context/AuthContext.jsx";
+const h = React.createElement;
+export default function StudentPortal() { const { user } = useAuth(); const [student, setStudent] = useState(null); const [notifications, setNotifications] = useState([]);
+    useEffect(() => { Promise.all([api.get("/students/"), api.get("/notifications/")]).then(([students, notices]) => { setStudent((students.data.results || students.data).find((item) => item.user === (user ? user.id : null)));
+            setNotifications(notices.data.results || notices.data); }); }, [user]); return h("section", { className: "page-section narrow" }, h("div", { className: "section-heading" }, h("div", null, h("span", { className: "eyebrow" }, "Student portal"), h("h2", null, "My profile"))), h("div", { className: "panel portal-panel" }, h(UserRound, { size: 30 }), student ? h("dl", null, h("dt", null, "Student Number"), h("dd", null, student.student_number), h("dt", null, "Name"), h("dd", null, `${student.first_name} ${student.last_name}`), h("dt", null, "Programme"), h("dd", null, student.programme), h("dt", null, "Approval"), h("dd", null, student.approval_status)) : h("p", null, "Your profile is awaiting administrator approval."), h("h3", null, h(Bell, { size: 18 }), " Notifications"), notifications.map((item) => h("p", { key: item.id }, h("strong", null, item.title), ": ", item.message)), h(Link, { className: "button", to: "/dashboard" }, "Back to dashboard"))); }

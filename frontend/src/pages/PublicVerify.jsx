@@ -1,0 +1,7 @@
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
+import { BadgeCheck, ShieldAlert } from "lucide-react";
+import api from "../services/api.js";
+const h = React.createElement;
+export default function PublicVerify() { const { token } = useParams(); const [result, setResult] = useState(null); const [error, setError] = useState("");
+    useEffect(() => { api.get(`/verify/${token}/`).then((response) => setResult(response.data.student)).catch(() => setError("This QR code is invalid or inactive.")); }, [token]); return h("main", { className: "login-page" }, h("section", { className: "login-card verification-card" }, result ? [h(BadgeCheck, { size: 46, key: "icon" }), h("h1", { key: "title" }, "Student Verified"), h("dl", { key: "data" }, h("dt", null, "Name"), h("dd", null, `${result.first_name} ${result.last_name}`), h("dt", null, "Student Number"), h("dd", null, result.student_number), h("dt", null, "Programme"), h("dd", null, result.programme), h("dt", null, "Status"), h("dd", null, h("span", { className: `status ${result.status}` }, result.status)))] : [h(ShieldAlert, { size: 46, key: "icon" }), h("h1", { key: "title" }, error || "Verifying QR code...")], h(Link, { to: "/login" }, "Staff login"))); }

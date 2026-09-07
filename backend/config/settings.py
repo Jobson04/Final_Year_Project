@@ -1,7 +1,10 @@
+import os
 from pathlib import Path
 
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+os.environ.setdefault("REGISTERED_STUDENT_NUMBERS", "2021378535")
 
 SECRET_KEY = "dev-only-change-me"
 DEBUG = True
@@ -84,6 +87,7 @@ CORS_ALLOWED_ORIGINS = [
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
         "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",

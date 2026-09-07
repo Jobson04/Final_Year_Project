@@ -1,76 +1,8 @@
+import React from "react";
+const h = React.createElement;
 export default function StudentFormFields({ form, setForm, photoPreview, setPhotoFile }) {
-  const update = (event) => {
-    const { name, value } = event.target;
-    setForm((current) => ({ ...current, [name]: value }));
-  };
-
-  const updatePhoto = (event) => {
-    const file = event.target.files?.[0] || null;
-    setPhotoFile(file);
-  };
-
-  return (
-    <div className="form-grid">
-      <label>
-        Student Number
-        <input name="student_number" value={form.student_number} onChange={update} required />
-      </label>
-      <label>
-        First Name
-        <input name="first_name" value={form.first_name} onChange={update} required />
-      </label>
-      <label>
-        Last Name
-        <input name="last_name" value={form.last_name} onChange={update} required />
-      </label>
-      <label>
-        Gender
-        <select name="gender" value={form.gender} onChange={update} required>
-          <option value="female">Female</option>
-          <option value="male">Male</option>
-          <option value="other">Other</option>
-        </select>
-      </label>
-      <label>
-        Date of Birth
-        <input type="date" name="date_of_birth" value={form.date_of_birth || ""} onChange={update} />
-      </label>
-      <label>
-        Programme
-        <input name="programme" value={form.programme} onChange={update} required />
-      </label>
-      <label>
-        School
-        <input name="school" value={form.school} onChange={update} />
-      </label>
-      <label>
-        Year of Study
-        <input type="number" min="1" max="10" name="year_of_study" value={form.year_of_study} onChange={update} required />
-      </label>
-      <label>
-        Email
-        <input type="email" name="email" value={form.email} onChange={update} />
-      </label>
-      <label>
-        Phone
-        <input name="phone" value={form.phone} onChange={update} />
-      </label>
-      <label>
-        Status
-        <select name="status" value={form.status} onChange={update}>
-          <option value="active">Active</option>
-          <option value="inactive">Inactive</option>
-        </select>
-      </label>
-      <label className="file-field">
-        ID Image
-        <input type="file" accept="image/*" onChange={updatePhoto} />
-      </label>
-      {photoPreview && (
-        <div className="photo-preview">
-          <img src={photoPreview} alt="Selected student ID" />
-        </div>
-      )}
-    </div>
-  );
+    const update = (event) => setForm((current) => ({...current, [event.target.name]: event.target.value }));
+    const updatePhoto = (event) => setPhotoFile(event.target.files && event.target.files[0] ? event.target.files[0] : null);
+    const field = (label, props) => h("label", { key: props.name }, label, h(props.type === "select" ? "select" : "input", {...props, onChange: update }, props.type === "select" ? [h("option", { key: "female", value: "female" }, "Female"), h("option", { key: "male", value: "male" }, "Male"), h("option", { key: "other", value: "other" }, "Other")] : null));
+    return h("div", { className: "form-grid" }, field("Student Number", { name: "student_number", value: form.student_number, placeholder: "Leave blank to generate automatically" }), field("First Name", { name: "first_name", value: form.first_name, required: true }), field("Last Name", { name: "last_name", value: form.last_name, required: true }), field("Gender", { name: "gender", value: form.gender, type: "select", required: true }), field("Date of Birth", { type: "date", name: "date_of_birth", value: form.date_of_birth || "" }), field("Programme", { name: "programme", value: form.programme, required: true }), field("School", { name: "school", value: form.school }), field("Year of Study", { type: "number", min: 1, max: 10, name: "year_of_study", value: form.year_of_study, required: true }), field("Email", { type: "email", name: "email", value: form.email }), field("Phone", { name: "phone", value: form.phone }), field("Status", { name: "status", value: form.status, type: "select" }), h("label", { className: "file-field", key: "photo" }, "ID Image", h("input", { type: "file", accept: "image/*", onChange: updatePhoto })), photoPreview && h("div", { className: "photo-preview", key: "preview" }, h("img", { src: photoPreview, alt: "Selected student ID" })));
 }

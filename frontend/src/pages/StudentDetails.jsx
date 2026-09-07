@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { Edit, RotateCcw, Trash2 } from "lucide-react";
+import { Edit, IdCard, RotateCcw, Trash2 } from "lucide-react";
 
 import api from "../services/api.js";
 
@@ -59,6 +59,7 @@ export default function StudentDetails() {
         </div>
         <div className="actions">
           <Link className="button" to={`/students/${id}/edit`}><Edit size={18} /> Edit</Link>
+          <Link className="button primary" to={`/students/${id}/card`}><IdCard size={18} /> Generate ID Card</Link>
           <button onClick={regenerateQr}><RotateCcw size={18} /> Regenerate QR</button>
           <button className="danger" onClick={deactivate}><Trash2 size={18} /> Deactivate</button>
         </div>

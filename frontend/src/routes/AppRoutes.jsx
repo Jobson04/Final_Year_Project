@@ -1,38 +1,18 @@
+import React from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-
 import Layout from "../components/Layout.jsx";
 import ProtectedRoute from "../components/ProtectedRoute.jsx";
 import Dashboard from "../pages/Dashboard.jsx";
 import Login from "../pages/Login.jsx";
+import Register from "../pages/Register.jsx";
+import PublicVerify from "../pages/PublicVerify.jsx";
+import StudentPortal from "../pages/StudentPortal.jsx";
 import Scanner from "../pages/Scanner.jsx";
 import ScanLogs from "../pages/ScanLogs.jsx";
 import StudentDetails from "../pages/StudentDetails.jsx";
 import StudentForm from "../pages/StudentForm.jsx";
 import Students from "../pages/Students.jsx";
-
-export default function AppRoutes() {
-  return (
-    <Routes>
-      <Route path="/login" element={<Login />} />
-      <Route
-        path="/"
-        element={
-          <ProtectedRoute>
-            <Layout />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<Navigate to="/dashboard" replace />} />
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="students" element={<Students />} />
-        <Route path="students/new" element={<StudentForm />} />
-        <Route path="students/:id" element={<StudentDetails />} />
-        <Route path="students/:id/edit" element={<StudentForm />} />
-        <Route path="scanner" element={<Scanner />} />
-        <Route path="scans" element={<ScanLogs />} />
-      </Route>
-      <Route path="*" element={<Navigate to="/dashboard" replace />} />
-    </Routes>
-  );
-}
-
+import IDCard from "../pages/IDCard.jsx";
+import Settings from "../pages/Settings.jsx";
+const h = React.createElement;
+export default function AppRoutes() { const admin = h(ProtectedRoute, { role: "admin" }, h(Layout)); const student = h(ProtectedRoute, { role: "student" }, h(Layout)); return h(Routes, null, h(Route, { path: "/login", element: h(Login) }), h(Route, { path: "/register", element: h(Register) }), h(Route, { path: "/verify/:token", element: h(PublicVerify) }), h(Route, { path: "/", element: admin }, h(Route, { index: true, element: h(Navigate, { to: "/dashboard", replace: true }) }), h(Route, { path: "dashboard", element: h(Dashboard) }), h(Route, { path: "students", element: h(Students) }), h(Route, { path: "students/new", element: h(StudentForm) }), h(Route, { path: "students/:id", element: h(StudentDetails) }), h(Route, { path: "students/:id/edit", element: h(StudentForm) }), h(Route, { path: "students/:id/card", element: h(IDCard) }), h(Route, { path: "scanner", element: h(Scanner) }), h(Route, { path: "scans", element: h(ScanLogs) }), h(Route, { path: "admin/settings", element: h(Settings) })), h(Route, { path: "/portal", element: student }, h(Route, { index: true, element: h(StudentPortal) })), h(Route, { path: "*", element: h(Navigate, { to: "/login", replace: true }) })); }

@@ -13,7 +13,7 @@ A Django REST API and React single-page app for registering students, generating
 ## Backend Setup
 
 ```bash
-cd backend
+cd backend`
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -33,6 +33,16 @@ npm run dev
 ```
 
 The frontend runs at `http://127.0.0.1:5173`.
+
+### Student registration
+
+Set the approved student computer numbers before starting the backend. Registration accepts only numbers in this list:
+
+```powershell
+$env:REGISTERED_STUDENT_NUMBERS="STU-001,STU-002,STU-003"
+```
+
+Administrators log in with `admin` / `admin123` after migrations. Students log in with their approved computer number and password. New students are logged in automatically after registration and remain pending until an administrator approves them.
 
 ## Main Workflow
 
