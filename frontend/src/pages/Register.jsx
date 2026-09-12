@@ -9,7 +9,10 @@ export default function Register() {
     const [photo, setPhoto] = useState(null);
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(false);
-    if (isAuthenticated) return h(Navigate, { to: user && user.role === "student" ? "/portal" : "/dashboard", replace: true });
+    if (isAuthenticated) {
+        const destination = user?.role === "student" ? "/portal" : user?.role === "lecturer" ? "/lecturer" : "/dashboard";
+        return h(Navigate, { to: destination, replace: true });
+    }
     const update = (event) => setForm({...form, [event.target.name]: event.target.value });
     const submit = async(event) => {
         event.preventDefault();
@@ -18,7 +21,8 @@ export default function Register() {
         const payload = new FormData();
         Object.entries(form).forEach(([key, value]) => payload.append(key, value));
         if (photo) payload.append("photo", photo);
-        try { await register(payload); } catch (err) { const data = err.response && err.response.data; setError(data && data.detail ? data.detail : "Registration failed."); } finally { setLoading(false); }
+        try { await register(payload); } catch (err) { const data = err.response && err.response.data;
+            setError(data && data.detail ? data.detail : "Registration failed."); } finally { setLoading(false); }
     };
     const fields = [
         ["student_number", "Approved student computer number"],

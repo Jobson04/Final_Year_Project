@@ -23,12 +23,35 @@ export default function IDCard() {
         ["Name", `${student.first_name} ${student.last_name}`],
         ["School", student.school || ""],
         ["Comp No", student.student_number || ""],
-        ["Prog", student.programme || ""],
-        ["NRC", student.national_id || ""],
-        ["Accom Details", student.accommodation || ""],
+        ["Program", student.programme || ""],
     ].map(([label, value]) => h("div", { className: "id-card-credential", key: label }, h("strong", null, `${label}:`), h("span", null, value)));
     const details = h("div", { className: "id-card-details", style: { fontFamily: settings && settings.font_family || "Arial, sans-serif" } }, credentialRows);
-    const body = h("div", { className: "id-card-body" }, photo, details, qrImage && h("img", { className: "id-card-qr", src: qrImage, alt: "Verification QR code" }));
-    const card = h("article", { className: "id-card", style: { background: settings && settings.background_color || "#ffffff", borderColor: settings && settings.accent_color || "#d49a27" } }, header, body, h("div", { className: "id-card-footer", style: { background: settings && settings.header_color || "#123b63" } }, `${settings && settings.signatory_name || "Registrar"}, ${settings && settings.office || "the Administration Office"}`));
+    const body = h("div", { className: "id-card-body" }, photo, details);
+
+    const officeText = `If found, return to ${(settings && settings.office) || "the Administration Office"}`;
+    const signatureImage = settings && settings.signature_image ?
+        h("img", { className: "id-card-signature-image", src: settings.signature_image, alt: "Digital signature" }) :
+        null;
+    const signatory = h("div", { className: "id-card-signatory" },
+        h("strong", null, settings && settings.signatory_name || "Registrar"),
+        settings && settings.signatory_title ? h("span", null, settings.signatory_title) : null
+    );
+
+    const back = h("div", { className: "id-card-back" },
+        h("div", { className: "id-card-back-grid" },
+            qrImage ?
+            h("div", { className: "id-card-qr-panel" }, h("img", { className: "id-card-qr", src: qrImage, alt: "Verification QR code" })) :
+            h("div", { className: "id-card-qr-panel placeholder-qr" }, "QR"),
+            h("div", { className: "id-card-back-details" },
+                h("p", { className: "id-card-office" }, officeText),
+                h("div", { className: "id-card-signature-block" },
+                    signatureImage,
+                    signatory
+                )
+            )
+        )
+    );
+
+    const card = h("article", { className: "id-card", style: { background: settings && settings.background_color || "#ffffff", borderColor: settings && settings.accent_color || "#d49a27" } }, header, body, back);
     return h("section", { className: "page-section card-print-page" }, heading, card);
 }
